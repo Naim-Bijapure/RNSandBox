@@ -15,10 +15,10 @@ import {
 const ChirpConnect = NativeModules.ChirpConnect;
 const ChirpConnectEmitter = new NativeEventEmitter(ChirpConnect);
 
-const key = "F3EE5544a3f31b0A85fBb0074";
-const secret = "c86185dfe61bF2322adB1779F92aedD5e812dbfE9B0bb86C1b";
+const key = 'F3EE5544a3f31b0A85fBb0074';
+const secret = 'c86185dfe61bF2322adB1779F92aedD5e812dbfE9B0bb86C1b';
 
-export default class App extends Component<{}> {
+export default class App extends Component {
 
   constructor(props) {
     super(props);
@@ -66,11 +66,12 @@ export default class App extends Component<{}> {
     )
 
     try {
-      ChirpConnect.init(key, secret);
+      ChirpConnect.init("F3EE5544a3f31b0A85fBb0074", "c86185dfe61bF2322adB1779F92aedD5e812dbfE9B0bb86C1b");
       await ChirpConnect.setConfigFromNetwork();
       ChirpConnect.start();
       this.setState({ initialised: true })
     } catch(e) {
+      alert(e);        
       console.warn(e.message);
     }
   }
@@ -122,3 +123,4 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
