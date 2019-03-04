@@ -1,45 +1,124 @@
-import React, { Component } from 'react'
-import {Text,View,Button} from 'react-native'
-import RNChirpReactNative, {ChirpEvent} from 'chirp-react-native';
+import React, { Component } from 'react';
+import Permissions from 'react-native-permissions';
+import {
+  Button,
+  Platform,
+  StyleSheet,
+  Text,
+  View
+} from 'react-native';
+import {
+  NativeEventEmitter,
+  NativeModules
+} from 'react-native';
 
- RNChirpReactNative.init("F3EE5544a3f31b0A85fBb0074", "c86185dfe61bF2322adB1779F92aedD5e812dbfE9B0bb86C1b");
-export default class MyChirp extends Component {
+const ChirpConnect = NativeModules.ChirpConnect;
+const ChirpConnectEmitter = new NativeEventEmitter(ChirpConnect);
 
-    render(){
-       return (
-            <View>
-            <Text>Yo this is Chirp </Text>
-            <Button title="click send" onPress={this.Send.bind(this)}/>
+const key = 'F3EE5544a3f31b0A85fBb0074';
+const secret = 'c86185dfe61bF2322adB1779F92aedD5e812dbfE9B0bb86C1b';
 
-            <Button title="click listen" onPress={this.Recive.bind(this)}/>
-            </View>
-        )
+export default class App extends Component<{}> {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      'initialised': false,
+      'status': 'Sleeping',
+      'data': '----------'
+    }
+  }
+
+  async componentDidMount() {
+    const response = await Permissions.check('microphone')
+    if (response !== 'authorized') {
+      await Permissions.request('microphone')
     }
 
-    async Send(){
-        alert('runniing');
-        try {
-            RNChirpReactNative.start();
-            // RNChirpReactNative.sendRandom();
-            RNChirpReactNative.send([172, 47, 117, 192]);
-            
-        } catch (error) {
-            alert(error);            
+    this.onStateChanged = ChirpConnectEmitter.addListener(
+      'onStateChanged',
+      (event) => {
+        if (event.status === ChirpConnect.CHIRP_CONNECT_STATE_STOPPED) {
+          this.setState({ status: 'Stopped' });
+        } else if (event.status === ChirpConnect.CHIRP_CONNECT_STATE_PAUSED) {
+          this.setState({ status: 'Paused' });
+        } else if (event.status === ChirpConnect.CHIRP_CONNECT_STATE_RUNNING) {
+          this.setState({ status: 'Running' });
+        } else if (event.status === ChirpConnect.CHIRP_CONNECT_STATE_SENDING) {
+          this.setState({ status: 'Sending' });
+        } else if (event.status === ChirpConnect.CHIRP_CONNECT_STATE_RECEIVING) {
+          this.setState({ status: 'Receiving' });
         }
-        
-    }
-    async Recive(){
-        try {
-            
-       const listen=      await RNChirpReactNative.getLicense();
-       const listener = RNChirpReactNative.on(ChirpEvent.onReceived, (data) => {
-        //Use the data received
-        alert(data);
-    })
-        } catch (error) {
-             alert(error);            
-        }
+      }
+    );
 
+    this.onReceived = ChirpConnectEmitter.addListener(
+      'onReceived',
+      (event) => {
+        if (event.data.length) {
+          this.setState({ data: event.data });
+        }
+      }
+    )
+
+    this.onError = ChirpConnectEmitter.addListener(
+      'onError', (event) => { console.warn(event.message) }
+    )
+
+    try {
+      ChirpConnect.init(key, secret);
+      await ChirpConnect.setConfigFromNetwork();
+      ChirpConnect.start();
+      this.setState({ initialised: true })
+    } catch(e) {
+      console.warn(e.message);
     }
+  }
+
+  componentWillUnmount() {
+    this.onStateChanged.remove();
+    this.onReceived.remove();
+    this.onError.remove();
+  }
+
+  onPress() {
+    ChirpConnect.send([0, 1, 2, 3, 4]);
+  }
+
+  render() {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.welcome}>
+          Welcome to Chirp Connect!
+        </Text>
+        <Text style={styles.instructions}>
+          {this.state.status}
+        </Text>
+        <Text style={styles.instructions}>
+          {this.state.data}
+        </Text>
+      <Button onPress={this.onPress} title='SEND' disabled={!this.state.initialised} />
+      </View>
+    );
+  }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 60,
+  },
+  instructions: {
+    padding: 10,
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
+  },
+});
