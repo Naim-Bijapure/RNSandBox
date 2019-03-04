@@ -1366,6 +1366,11 @@ chardet@^0.4.0:
   resolved "https://registry.yarnpkg.com/chardet/-/chardet-0.4.2.tgz#b5473b33dc97c424e5d98dc87d55d4d8a29c8bf2"
   integrity sha1-tUc7M9yXxCTl2Y3IfVXU2KKci/I=
 
+chirp-react-native@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/chirp-react-native/-/chirp-react-native-0.0.3.tgz#4348e54c8b1cf4635d009516387256422e63537d"
+  integrity sha512-Vm1Zq4ex5g80fJAuIsfXffch6pyqI0/aNyGOM4VvawSCe8R5dNfwrSjEnT92+ouBEAVhtz70rZDUY61lGCMGaA==
+
 chownr@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-1.1.1.tgz#54726b8b8fff4df053c42187e801fb4412df1494"

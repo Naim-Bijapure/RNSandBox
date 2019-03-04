@@ -133,10 +133,11 @@ android {
                         versionCodes.get(abi) * 1048576 + defaultConfig.versionCode
             }
         }
-    }
+     }
 }
 
 dependencies {
+    compile project(':chirp-react-native')
     compile project(':react-native-vector-icons')
     compile project(':rn-fetch-blob')
     implementation fileTree(dir: "libs", include: ["*.jar"])
