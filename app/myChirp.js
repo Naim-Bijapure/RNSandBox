@@ -15,8 +15,8 @@ import {
 const ChirpConnect = NativeModules.ChirpConnect;
 const ChirpConnectEmitter = new NativeEventEmitter(ChirpConnect);
 
-const key = 'F3EE5544a3f31b0A85fBb0074';
-const secret = 'c86185dfe61bF2322adB1779F92aedD5e812dbfE9B0bb86C1b';
+const key = "F3EE5544a3f31b0A85fBb0074";
+const secret = "c86185dfe61bF2322adB1779F92aedD5e812dbfE9B0bb86C1b";
 
 export default class App extends Component<{}> {
 
