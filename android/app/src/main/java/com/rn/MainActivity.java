@@ -1,4 +1,4 @@
-package com.chirpreactnative;
+package com.rn;
 
 import com.facebook.react.ReactActivity;
 
