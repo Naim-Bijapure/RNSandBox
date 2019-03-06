@@ -36,7 +36,7 @@ const ChirpConnectEmitter = new NativeEventEmitter(ChirpConnect);
 const key = 'CHIRP_APPLICATION_KEY';
 const secret = 'CHIRP_APPLICATION_SECRET';
 
-export default class App extends Component<{}> {
+export default class App extends Component {
 
   constructor(props) {
     super(props);

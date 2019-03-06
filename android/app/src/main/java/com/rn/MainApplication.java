@@ -2,9 +2,12 @@ package com.rn;
 
 import android.app.Application;
 
+import com.chirpconnect.rctchirpconnect.RCTChirpConnectPackage;
 import com.facebook.react.ReactApplication;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import cl.json.RNSharePackage;
+import com.reactlibrary.RNChirpReactNativePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -25,8 +28,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFetchBlobPackage(),
             new VectorIconsPackage(),
-            new RNFetchBlobPackage()
+            new RNSharePackage(),
+            new RNChirpReactNativePackage(),
+            new RCTChirpConnectPackage()
+
       );
     }
 
